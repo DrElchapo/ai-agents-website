@@ -143,3 +143,13 @@ site/
 *.tar.gz
 *.tgz
 *.bak
+
+# =========================
+# 📁 PROJECT SPECIFIC
+# =========================
+# Development files (not needed for website)
+MASTER_PLAN.md
+PLAN_ECOMMERCE.md
+daily_summaries/
+pain_points_parser/
+images/
