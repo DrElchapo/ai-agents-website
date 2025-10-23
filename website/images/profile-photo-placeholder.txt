@@ -1,0 +1,11 @@
+Place your profile photo here as "profile-photo.jpg"
+
+Recommended specifications:
+- Size: 400x400 pixels minimum
+- Format: JPG or PNG
+- Quality: High resolution
+- Style: Professional headshot
+- Background: Neutral or blurred
+- Expression: Friendly and confident
+
+The image will be automatically cropped to a circle and resized to fit the design.

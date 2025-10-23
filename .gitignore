@@ -1,0 +1,145 @@
+# =========================
+# 🧠 SYSTEM FILES
+# =========================
+# macOS
+.DS_Store
+.DS_Store?
+.AppleDouble
+.LSOverride
+Icon?
+__MACOSX/
+.Spotlight-V100
+.Trashes
+
+# Linux
+*~
+.nfs*
+
+# =========================
+# 🧩 IDE & EDITORS
+# =========================
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+*.bak
+*.tmp
+*.temp
+
+# =========================
+# 🐍 PYTHON
+# =========================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.env/
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+.pytest_cache/
+.mypy_cache/
+.pyre/
+.pytype/
+.eggs/
+*.egg-info/
+dist/
+build/
+*.manifest
+*.spec
+.coverage
+coverage/
+htmlcov/
+
+# =========================
+# 🧰 DATABASES
+# =========================
+*.db
+*.sqlite
+*.sqlite3
+
+# =========================
+# 🧾 LOGS & REPORTS
+# =========================
+*.log
+logs/
+*.out
+*.pid
+*.gz
+*.tmp
+
+# =========================
+# 🔒 SECURITY & SECRETS
+# =========================
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.crt
+*.p12
+*.cer
+*.csr
+*.der
+*.asc
+.ssh/
+.gnupg/
+
+# =========================
+# 🐳 DOCKER & CONTAINERS
+# =========================
+Dockerfile~
+docker-compose*.yml~
+*.tar
+*.img
+
+# =========================
+# 🧱 NODE / FRONTEND
+# =========================
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-store/
+.cache-loader/
+bower_components/
+.next/
+.nuxt/
+.out/
+coverage/
+
+# =========================
+# 📓 JUPYTER & DOCS
+# =========================
+.ipynb_checkpoints/
+docs/_build/
+site/
+
+# =========================
+# ⚙️ CI / CD
+# =========================
+.github/
+.gitlab/
+.circleci/
+*.coverage
+*.lcov
+
+# =========================
+# 🧩 MISC
+# =========================
+*.dmg
+*.exe
+*.dll
+*.app
+*.pkg
+*.deb
+*.rpm
+*.zip
+*.7z
+*.tar.gz
+*.tgz
+*.bak
