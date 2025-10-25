@@ -331,6 +331,11 @@ function updateCarousel() {
     
     totalSlides = testimonials.length;
     
+    // Reset to first slide
+    currentSlide = 0;
+    
+    console.log('Carousel initialized:', { totalSlides, currentSlide, testimonials: testimonials.length });
+    
     // Add testimonial cards to track
     testimonials.forEach((testimonial, index) => {
         const card = document.createElement('div');
@@ -358,17 +363,60 @@ function updateCarouselPosition() {
     // Calculate the width of one card including gap
     const container = document.querySelector('.carousel-container');
     const containerWidth = container ? container.offsetWidth : 800;
-    const cardWidth = Math.min(350, containerWidth - 40); // Account for padding
-    const gap = 24; // 1.5rem gap
-    const translateX = -(currentSlide * (cardWidth + gap));
     
-    track.style.transform = `translateX(${translateX}px)`;
+    // Determine how many cards to show based on screen size
+    let cardsToShow = 1;
+    let cardWidth = 350;
+    let gap = 24; // 1.5rem gap
     
-    // Update dots
-    const dots = document.querySelectorAll('.carousel-dot');
-    dots.forEach((dot, index) => {
-        dot.classList.toggle('active', index === currentSlide);
-    });
+    if (window.innerWidth >= 1920) {
+        cardsToShow = 3;
+        cardWidth = Math.min(400, (containerWidth - 100) / 3); // 3 cards with gaps
+        gap = 40; // 2.5rem gap
+    } else if (window.innerWidth >= 1440) {
+        cardsToShow = 2;
+        cardWidth = Math.min(380, (containerWidth - 60) / 2); // 2 cards with gap
+        gap = 32; // 2rem gap
+    } else if (window.innerWidth >= 1024) {
+        cardsToShow = 2;
+        cardWidth = Math.min(350, (containerWidth - 40) / 2); // 2 cards with gap
+        gap = 24; // 1.5rem gap
+    } else {
+        cardWidth = Math.min(350, containerWidth - 40); // 1 card
+        gap = 24; // 1.5rem gap
+    }
+    
+    // Calculate transform to center the current slide
+    const slideWidth = cardWidth + gap;
+    
+    // For single card view, center it properly
+    if (cardsToShow === 1) {
+        const centerOffset = (containerWidth - cardWidth) / 2;
+        const translateX = -(currentSlide * slideWidth) + centerOffset;
+        track.style.transform = `translateX(${translateX}px)`;
+        console.log('Single card positioning:', { currentSlide, cardWidth, containerWidth, centerOffset, translateX });
+    } else {
+        // For multiple cards, center the group
+        const totalCardsWidth = cardsToShow * cardWidth + (cardsToShow - 1) * gap;
+        const centerOffset = (containerWidth - totalCardsWidth) / 2;
+        const translateX = -(currentSlide * slideWidth) + centerOffset;
+        track.style.transform = `translateX(${translateX}px)`;
+        console.log('Multiple cards positioning:', { currentSlide, cardsToShow, cardWidth, containerWidth, centerOffset, translateX });
+    }
+    
+    // Update dots - show fewer dots for better UX on large screens
+    const dotsContainer = document.getElementById('carouselDots');
+    if (dotsContainer) {
+        const totalDots = Math.ceil(totalSlides / cardsToShow);
+        dotsContainer.innerHTML = '';
+        
+        for (let i = 0; i < totalDots; i++) {
+            const dot = document.createElement('div');
+            dot.className = `carousel-dot ${i === Math.floor(currentSlide / cardsToShow) ? 'active' : ''}`;
+            dot.addEventListener('click', () => goToSlide(i * cardsToShow));
+            dotsContainer.appendChild(dot);
+        }
+    }
     
     // Update button states (no disabling for looping carousel)
     const prevBtn = document.getElementById('prevBtn');
@@ -389,26 +437,50 @@ function goToSlide(slideIndex) {
 
 // Function to go to next slide
 function nextSlide() {
-    if (currentSlide < totalSlides - 1) {
-        currentSlide++;
-        updateCarouselPosition();
+    const container = document.querySelector('.carousel-container');
+    const containerWidth = container ? container.offsetWidth : 800;
+    
+    // Determine how many cards to show based on screen size
+    let cardsToShow = 1;
+    if (window.innerWidth >= 1920) {
+        cardsToShow = 3;
+    } else if (window.innerWidth >= 1440) {
+        cardsToShow = 2;
+    } else if (window.innerWidth >= 1024) {
+        cardsToShow = 2;
+    }
+    
+    if (currentSlide < totalSlides - cardsToShow) {
+        currentSlide += cardsToShow;
     } else {
         // Loop back to first slide
         currentSlide = 0;
-        updateCarouselPosition();
     }
+    updateCarouselPosition();
 }
 
 // Function to go to previous slide
 function prevSlide() {
-    if (currentSlide > 0) {
-        currentSlide--;
-        updateCarouselPosition();
+    const container = document.querySelector('.carousel-container');
+    const containerWidth = container ? container.offsetWidth : 800;
+    
+    // Determine how many cards to show based on screen size
+    let cardsToShow = 1;
+    if (window.innerWidth >= 1920) {
+        cardsToShow = 3;
+    } else if (window.innerWidth >= 1440) {
+        cardsToShow = 2;
+    } else if (window.innerWidth >= 1024) {
+        cardsToShow = 2;
+    }
+    
+    if (currentSlide >= cardsToShow) {
+        currentSlide -= cardsToShow;
     } else {
         // Loop to last slide
-        currentSlide = totalSlides - 1;
-        updateCarouselPosition();
+        currentSlide = Math.max(0, totalSlides - cardsToShow);
     }
+    updateCarouselPosition();
 }
 
 // Function to add testimonial to the page
