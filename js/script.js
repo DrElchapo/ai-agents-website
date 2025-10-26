@@ -453,8 +453,11 @@ function loadTestimonialsFromStorage() {
         // Filter only approved testimonials (for demo, we'll show all)
         const approvedTestimonials = savedTestimonials.filter(t => t.status === 'approved' || t.status === 'pending');
         
-        // Set testimonials array
-        testimonials = approvedTestimonials;
+        // Set testimonials array - only if we have saved testimonials
+        if (approvedTestimonials.length > 0) {
+            testimonials = approvedTestimonials;
+        }
+        // Otherwise testimonials stays empty and updateCarousel will use defaults
         
         // Update carousel
         updateCarousel();
@@ -462,6 +465,7 @@ function loadTestimonialsFromStorage() {
         console.log('Loaded testimonials from localStorage:', approvedTestimonials.length);
     } catch (error) {
         console.error('Error loading testimonials from localStorage:', error);
+        updateCarousel(); // Load defaults on error
     }
 }
 
