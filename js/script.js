@@ -334,7 +334,11 @@ function updateCarousel() {
     // Reset to first slide
     currentSlide = 0;
     
-    console.log('Carousel initialized:', { totalSlides, currentSlide, testimonials: testimonials.length });
+    console.log('=== CAROUSEL DEBUG ===');
+    console.log('Total slides:', totalSlides);
+    console.log('Current slide:', currentSlide);
+    console.log('Testimonials count:', testimonials.length);
+    console.log('Testimonials data:', testimonials);
     
     // Add testimonial cards to track
     testimonials.forEach((testimonial, index) => {
@@ -355,74 +359,51 @@ function updateCarousel() {
     updateCarouselPosition();
 }
 
-// Function to update carousel position
+// CAROUSEL - Simple left-aligned slide
 function updateCarouselPosition() {
     const track = document.getElementById('testimonialsTrack');
-    if (!track) return;
-    
-    // Calculate the width of one card including gap
     const container = document.querySelector('.carousel-container');
-    const containerWidth = container ? container.offsetWidth : 800;
     
-    // Determine how many cards to show based on screen size
-    let cardsToShow = 1;
-    let cardWidth = 350;
-    let gap = 24; // 1.5rem gap
+    if (!track || !container) return;
     
-    if (window.innerWidth >= 1920) {
-        cardsToShow = 3;
-        cardWidth = Math.min(400, (containerWidth - 100) / 3); // 3 cards with gaps
-        gap = 40; // 2.5rem gap
-    } else if (window.innerWidth >= 1440) {
-        cardsToShow = 2;
-        cardWidth = Math.min(380, (containerWidth - 60) / 2); // 2 cards with gap
-        gap = 32; // 2rem gap
-    } else if (window.innerWidth >= 1024) {
-        cardsToShow = 2;
-        cardWidth = Math.min(350, (containerWidth - 40) / 2); // 2 cards with gap
-        gap = 24; // 1.5rem gap
-    } else {
-        cardWidth = Math.min(350, containerWidth - 40); // 1 card
-        gap = 24; // 1.5rem gap
-    }
-    
-    // Calculate transform to center the current slide
+    // Get REAL dimensions from DOM
+    const containerWidth = container.offsetWidth;
+    const firstCard = track.querySelector('.testimonial-card');
+    const cardWidth = firstCard ? firstCard.offsetWidth : 300;
+    const gap = 24;
     const slideWidth = cardWidth + gap;
     
-    // For single card view, center it properly
-    if (cardsToShow === 1) {
-        const centerOffset = (containerWidth - cardWidth) / 2;
-        const translateX = -(currentSlide * slideWidth) + centerOffset;
-        track.style.transform = `translateX(${translateX}px)`;
-        console.log('Single card positioning:', { currentSlide, cardWidth, containerWidth, centerOffset, translateX });
-    } else {
-        // For multiple cards, center the group
-        const totalCardsWidth = cardsToShow * cardWidth + (cardsToShow - 1) * gap;
-        const centerOffset = (containerWidth - totalCardsWidth) / 2;
-        const translateX = -(currentSlide * slideWidth) + centerOffset;
-        track.style.transform = `translateX(${translateX}px)`;
-        console.log('Multiple cards positioning:', { currentSlide, cardsToShow, cardWidth, containerWidth, centerOffset, translateX });
-    }
+    // NO centering - just simple slide
+    const translateX = -(currentSlide * slideWidth);
     
-    // Update dots - show fewer dots for better UX on large screens
+    track.style.transform = `translateX(${translateX}px)`;
+    
+    console.log('CAROUSEL:', { 
+        currentSlide, 
+        totalSlides,
+        translateX,
+        containerWidth,
+        cardWidth,
+        slideWidth
+    });
+    
+    // Update dots
     const dotsContainer = document.getElementById('carouselDots');
     if (dotsContainer) {
-        const totalDots = Math.ceil(totalSlides / cardsToShow);
         dotsContainer.innerHTML = '';
         
-        for (let i = 0; i < totalDots; i++) {
+        for (let i = 0; i < totalSlides; i++) {
             const dot = document.createElement('div');
-            dot.className = `carousel-dot ${i === Math.floor(currentSlide / cardsToShow) ? 'active' : ''}`;
-            dot.addEventListener('click', () => goToSlide(i * cardsToShow));
+            dot.className = `carousel-dot ${i === currentSlide ? 'active' : ''}`;
+            dot.addEventListener('click', () => goToSlide(i));
             dotsContainer.appendChild(dot);
         }
     }
     
-    // Update button states (no disabling for looping carousel)
+    // Update button states
     const prevBtn = document.getElementById('prevBtn');
     const nextBtn = document.getElementById('nextBtn');
     
-    // Remove disabled state for looping carousel
     if (prevBtn) prevBtn.disabled = false;
     if (nextBtn) nextBtn.disabled = false;
 }
@@ -432,53 +413,26 @@ function goToSlide(slideIndex) {
     if (slideIndex >= 0 && slideIndex < totalSlides) {
         currentSlide = slideIndex;
         updateCarouselPosition();
+        console.log('Go to slide:', slideIndex, 'currentSlide:', currentSlide);
     }
 }
 
-// Function to go to next slide
+// NEW SIMPLE NAVIGATION
 function nextSlide() {
-    const container = document.querySelector('.carousel-container');
-    const containerWidth = container ? container.offsetWidth : 800;
-    
-    // Determine how many cards to show based on screen size
-    let cardsToShow = 1;
-    if (window.innerWidth >= 1920) {
-        cardsToShow = 3;
-    } else if (window.innerWidth >= 1440) {
-        cardsToShow = 2;
-    } else if (window.innerWidth >= 1024) {
-        cardsToShow = 2;
-    }
-    
-    if (currentSlide < totalSlides - cardsToShow) {
-        currentSlide += cardsToShow;
+    if (currentSlide < totalSlides - 1) {
+        currentSlide += 1;
     } else {
-        // Loop back to first slide
-        currentSlide = 0;
+        currentSlide = 0; // Loop to first
     }
     updateCarouselPosition();
 }
 
-// Function to go to previous slide
+// NEW SIMPLE NAVIGATION
 function prevSlide() {
-    const container = document.querySelector('.carousel-container');
-    const containerWidth = container ? container.offsetWidth : 800;
-    
-    // Determine how many cards to show based on screen size
-    let cardsToShow = 1;
-    if (window.innerWidth >= 1920) {
-        cardsToShow = 3;
-    } else if (window.innerWidth >= 1440) {
-        cardsToShow = 2;
-    } else if (window.innerWidth >= 1024) {
-        cardsToShow = 2;
-    }
-    
-    if (currentSlide >= cardsToShow) {
-        currentSlide -= cardsToShow;
+    if (currentSlide > 0) {
+        currentSlide -= 1;
     } else {
-        // Loop to last slide
-        currentSlide = Math.max(0, totalSlides - cardsToShow);
+        currentSlide = totalSlides - 1; // Loop to last
     }
     updateCarouselPosition();
 }
