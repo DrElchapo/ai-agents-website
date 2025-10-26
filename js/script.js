@@ -216,49 +216,13 @@ document.addEventListener('DOMContentLoaded', function() {
     
     if (testimonialForm) {
         testimonialForm.addEventListener('submit', function(e) {
-            // Базовая валидация перед отправкой
+            // Client-side validation
             if (!validateTestimonialForm()) {
                 e.preventDefault();
                 return false;
             }
-            // Убираем preventDefault чтобы форма отправлялась через Formspree
-            // e.preventDefault();
-            
-            // Get form data
-            const formData = new FormData(testimonialForm);
-            const testimonialData = {
-                clientName: formData.get('clientName'),
-                companyName: formData.get('companyName'),
-                jobTitle: formData.get('jobTitle'),
-                agentType: formData.get('agentType'),
-                testimonialText: formData.get('testimonialText'),
-                rating: formData.get('rating'),
-                email: formData.get('email')
-            };
-            
-            // Validate required fields
-            if (!testimonialData.clientName || !testimonialData.companyName || 
-                !testimonialData.jobTitle || !testimonialData.agentType || 
-                !testimonialData.testimonialText || !testimonialData.rating || 
-                !testimonialData.email) {
-                alert('Please fill in all required fields.');
-                return;
-            }
-            
-            // Show success message
-            alert('Thank you for your testimonial! We will review it and may contact you for verification before publishing.');
-            
-            // Add testimonial to the published section (for demo purposes)
-            addTestimonialToPage(testimonialData);
-            
-            // Save to localStorage for persistence
-            saveTestimonialToStorage(testimonialData);
-            
-            // Reset form
-            testimonialForm.reset();
-            
-            // In a real implementation, you would send this data to your server
-            console.log('Testimonial submitted:', testimonialData);
+            // Form will submit to Formspree automatically
+            console.log('Submitting testimonial to Formspree...');
         });
     }
 });
